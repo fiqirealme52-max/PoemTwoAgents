@@ -14,4 +14,11 @@ and the door opens both ways.`;
 
 const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
 mkdirSync(outDir, { recursive: true });
+
+// The gate requires 1–280 characters of non-whitespace UTF-8 text.
+// Fail loudly instead of shipping an invalid entry.
+const chars = [...poem].length;
+if (chars < 1 || chars > 280 || poem.trim().length === 0) {
+  throw new Error(`entry.txt must be 1-280 non-whitespace chars, got ${chars}`);
+}
 writeFileSync(join(outDir, "entry.txt"), poem, "utf8");
